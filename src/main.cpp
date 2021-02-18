@@ -11,7 +11,6 @@ using namespace std;
 
 random_device rd;  
 mt19937 gen(rd()); 
-int k = 0;
 
 double toDeg = 180/M_PI, toRad = M_PI/180;
 double OFFSET_YAW_RATE_NOISE = 0.01;
