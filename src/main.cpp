@@ -128,7 +128,7 @@ void normalize_weight(vector<Particle> &particles)
 }
 
 
-MatrixXd calc_input(double time )
+MatrixXd calc_input(double time)
 {
      double yaw_rate,v;
      MatrixXd u(2,1);
@@ -464,20 +464,21 @@ int main()
      xDR << 0,0,0;   
 
      //history
-     MatrixXd hxEst = xEst;
-     MatrixXd hxTrue = xTrue;
-     MatrixXd hxDR = xTrue;  
+     // MatrixXd hxEst = xEst;
+     // MatrixXd hxTrue = xTrue;
+     // MatrixXd hxDR = xTrue;  
      Vector3d x_state;
-     
      vector<Particle> particles;
      for(int i=0; i<N_PARTICLE; i++)
      {
           Particle p(n_landmark);
           particles.push_back(p);
      }
-     
+
+     int cnt = 0;
      while (SIM_TIME >= time)
      {
+          cout<<"iter no."<<cnt<<endl;
           Vector2d ud;
           MatrixXd z = MatrixXd::Zero(3,0);
          
@@ -490,16 +491,41 @@ int main()
           
           xEst = calc_final_state(particles, xEst);
           
-          x_state << xEst(0), xEst(1), xEst(2);
+          //x_state << xEst(0), xEst(1), xEst(2);
           
-          hxEst = hstack(hxEst,x_state);
-          hxDR = hstack(hxDR,xDR);
-          hxTrue = hstack(hxTrue, xTrue);
+          // hxEst = hstack(hxEst,x_state);
+          // hxDR = hstack(hxDR,xDR);
+          // hxTrue = hstack(hxTrue, xTrue);
+          
+          //Vectors for Plotting 
+          vector<double> part_x,part_y;
+          vector<double> x,y;
+          vector<double> x_j,y_j;
 
+          for(int i = 0;i < RFID.rows(); i++)
+          {
+               x.push_back(RFID(i,0));
+               y.push_back(RFID(i,1));  
+          }
+          
+          for(int i = 0; i < N_PARTICLE; i++)
+          {
+               part_x.push_back(particles[i].x);
+               part_y.push_back(particles[i].y);
+               for (int j = 0; j < particles[i].lm.size(); j++)
+               {    
+                    x_j.push_back(particles[i].lm[j][0]);
+                    y_j.push_back(particles[i].lm[j][1]); 
+               }
+          }
+          plt::plot(x_j, y_j, "xb");
+          plt::plot(part_x, part_y, ".r");
+          plt::plot(x,y,"xb");
+          plt::axis("Equal");
+          plt::grid(true);
+          plt::pause(0.001);
+          plt::show();
+          cnt +=1;
      }  
-
+          
 }
-
-
-
-
