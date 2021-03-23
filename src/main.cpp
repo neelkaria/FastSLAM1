@@ -518,6 +518,7 @@ int main()
                     y_j.push_back(particles[i].lm[j][1]); 
                }
           }
+	  plt::clf();
           plt::plot(x_j, y_j, "xb");
           plt::plot(part_x, part_y, ".r");
           plt::plot(x,y,"xb");
