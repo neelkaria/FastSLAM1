@@ -524,7 +524,6 @@ int main()
           plt::axis("Equal");
           plt::grid(true);
           plt::pause(0.001);
-          plt::show();
           cnt +=1;
      }  
           
